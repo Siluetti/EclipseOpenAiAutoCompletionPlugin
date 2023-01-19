@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+          id="futuray_openai_autocompletion_category"
+          name="OpenAI Code completion proposals"
+          point="org.eclipse.jdt.ui.javaCompletionProposalComputer">
+          <proposalCategory />
+    </extension>
+    
+    <extension
+          id="futuray_openai_autocompletion_proposal"
+          point="org.eclipse.jdt.ui.javaCompletionProposalComputer">
+       <javaCompletionProposalComputer
+		      class="openaiautocompletion.Activator"
+		      categoryId="com.codeandme.jsdt.contentassist.futuray_openai_autocompletion_category"
+		      activate="true">
+	   </javaCompletionProposalComputer>
+    </extension>
+</plugin>

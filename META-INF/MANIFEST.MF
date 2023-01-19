@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OpenAiAutoCompletion
+Bundle-SymbolicName: OpenAiAutoCompletion;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: openaiautocompletion.Activator
+Bundle-Vendor: Futuray
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jface.text;bundle-version="3.20.100",
+ org.eclipse.jdt.ui;bundle-version="3.26.100"
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Automatic-Module-Name: OpenAiAutoCompletion
+Bundle-ActivationPolicy: lazy

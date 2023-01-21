@@ -161,31 +161,36 @@ public class Activator extends AbstractUIPlugin implements IJavaCompletionPropos
 						ITextEditor editor = (ITextEditor)part;
 						
 						// get cursor location
-//						IDocumentProvider provider = editor.getDocumentProvider();
-//						IDocument document = provider.getDocument(part.getEditorInput());
-//						ITextSelection textSelection = (ITextSelection) part.getSite().getSelectionProvider().getSelection();
-//						int offset = textSelection.getOffset();
-//						try {
-//							int lineNumber = document.getLineOfOffset(offset);
-//						} catch (BadLocationException e2) {
-//							// TODO Auto-generated catch block
-//							e2.printStackTrace();
-//						}
+						IDocumentProvider provider = editor.getDocumentProvider();
+						IDocument document = provider.getDocument(part.getEditorInput());
+						ITextSelection textSelection = (ITextSelection) part.getSite().getSelectionProvider().getSelection();
+						int start = textSelection.getStartLine();
+						int end = textSelection.getEndLine();
+						int offset = textSelection.getOffset();
+						try {
+							int lineNumber = document.getLineOfOffset(offset);
+						} catch (BadLocationException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+						}
 						// end of get cursor location
 						
 						
-						IDocumentProvider dp = editor.getDocumentProvider();
-						IDocument doc = dp.getDocument(editor.getEditorInput());
+						System.out.println("Start "+start+", end "+end+", offset "+offset);
+//						IDocumentProvider dp = editor.getDocumentProvider();
+//						IDocument doc = dp.getDocument(editor.getEditorInput());
+//						String text = doc.get() + "testtesttest";
+//						doc.set(text);
+						
 						try {
-//							String text = doc.get() + "testtesttest";
-							
-							int offset = doc.getLineOffset(doc.getNumberOfLines()-1);
-							doc.replace(offset, 0, "testtesttest\n");
+							document.replace(offset, 0, "testtesttest\n");
 						} catch (BadLocationException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
-							throw new RuntimeException(e1);
 						}
+						
+						// doc.set(text) sets the cursor in the start of the file, so set the cursor in the same location it was in
+						part.getSite().getSelectionProvider().setSelection(textSelection);
 					}
 
 					@Override

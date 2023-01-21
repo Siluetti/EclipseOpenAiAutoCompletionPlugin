@@ -17,4 +17,41 @@
 		      activate="true">
 	   </javaCompletionProposalComputer>
     </extension>
+    
+    <extension point="org.eclipse.ui.startup">
+	   <startup class="openaiautocompletion.Activator" activate="true"/>
+	</extension>
+	
+<!--    <extension
+          id="futuray_openai_startup"
+          point="org.eclipse.ui.startup">
+       <javaStartup
+		      class="openaiautocompletion.Activator"
+		      categoryId="com.futuray.jsdt.contentassist.futuray_openai_startup_category"
+		      activate="true" />
+    </extension>
+-->
+<!--
+   <extension point="org.eclipse.ui.startup"/>
+-->
+
+
+<!--
+   <extension
+          id="futuray_openai_predictivetext_category"
+          name="OpenAI Code predictive text proposals"
+          point="org.eclipse.ui.startup">
+          <proposalCategory /> 
+    </extension>
+    
+    <extension
+          id="futuray_openai_autocompletion_proposal"
+          point="org.eclipse.ui.startup">
+       <javaCompletionProposalComputer
+		      class="openaiautocompletion.Activator"
+		      categoryId="com.futuray.jsdt.contentassist.futuray_openai_autocompletion_category"
+		      activate="true">
+	   </javaCompletionProposalComputer>
+    </extension>
+-->
 </plugin>

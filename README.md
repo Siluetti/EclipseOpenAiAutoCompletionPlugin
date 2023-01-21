@@ -1,8 +1,28 @@
+
+# How to use startup
+https://stackoverflow.com/questions/22164480/unable-to-use-the-fileeditorinput-class-in-eclipse
+http://sens.cse.msu.edu/Software/eclipse/plugins/org.eclipse.ui_2.0.0/doc/org_eclipse_ui_startup.html
+https://stackoverflow.com/questions/28925894/how-to-run-plugin-code-in-eclipse-automatically-on-startup
+
+
+# How to listen events 
+https://stackoverflow.com/questions/26871970/eclipse-plugin-development-how-to-listen-events-in-eclipse-editor
+
+## Listening to keypress
+https://www.eclipse.org/forums/index.php/t/385945/
+
+How to get IEditor: https://www.tabnine.com/code/java/classes/org.eclipse.ui.texteditor.ITextEditor
+https://stackoverflow.com/questions/12618984/how-to-add-keydown-up-event-listener-on-eclipse-rcp-editor-view
+
+https://wiki.eclipse.org/FAQ_How_do_I_insert_text_in_the_active_text_editor%3F
+
+https://wiki.eclipse.org/FAQ_How_do_I_use_the_text_document_model%3F
+
 Seuraavat askeleet (kohdat 6 ja 7):
 https://www.vogella.com/tutorials/EclipseEditors/article.html
 
 
-
+https://github.com/narainkrishh/naraintools/tree/master/CodePickerPlugin
 
 
 

@@ -108,10 +108,11 @@ public class Activator extends AbstractUIPlugin implements IJavaCompletionPropos
 		wb.addWindowListener(generateWindowListener());
 	}
 
-	private IWindowListener generateWindowListener() 
-	{
+	private IWindowListener generateWindowListener() {
 		System.out.println("Generating window listener \n\n=================================\\n\\n=================================\\n\\n=================================\\n\\n=================================\\n\\n=================================Starting up\\n\\n=================================\\n\\n=================================\\n\\n=================================");
 		return new IWindowListener() {
+			private KeyListener keylistener;
+
 			@Override
 			public void windowOpened(IWorkbenchWindow window) {
 				System.out.println("Window opened \n\n=================================\\n\\n=================================\\n\\n=================================\\n\\n=================================\\n\\n=================================Starting up\\n\\n=================================\\n\\n=================================\\n\\n=================================");
@@ -121,85 +122,105 @@ public class Activator extends AbstractUIPlugin implements IJavaCompletionPropos
 			@Override
 			public void windowDeactivated(IWorkbenchWindow window) {
 				System.out.println("Window windowDeactivated \n\n=================================\\n\\n=================================\\n\\n=================================\\n\\n=================================\\n\\n=================================Starting up\\n\\n=================================\\n\\n=================================\\n\\n=================================");
-				//	            IWorkbenchPage activePage = window.getActivePage(); 
-				//	            activePage.removePartListener(generateIPartListener2());
+				removeKeylistenerFromWindow(window);
 			}
 
 			@Override
 			public void windowClosed(IWorkbenchWindow window) {
 				System.out.println("Window windowClosed \n\n=================================\\n\\n=================================\\n\\n=================================\\n\\n=================================\\n\\n=================================Starting up\\n\\n=================================\\n\\n=================================\\n\\n=================================");
-				//	            IWorkbenchPage activePage = window.getActivePage(); 
-				//	            activePage.removePartListener(generateIPartListener2());
+				removeKeylistenerFromWindow(window);
+			}
 
+			private void removeKeylistenerFromWindow(IWorkbenchWindow window) {
+				if(keylistener != null) {
+					StyledText styledText = getStyledText(window);
+					if(styledText != null) {
+						styledText.removeKeyListener(keylistener);
+					}
+					keylistener = null;
+				}
 			}
 
 			@Override
 			public void windowActivated(IWorkbenchWindow window) {
 				System.out.println("Window windowActivated \n\n=================================\\n\\n=================================\\n\\n=================================\\n\\n=================================\\n\\n=================================Starting up\\n\\n=================================\\n\\n=================================\\n\\n=================================");
 				addKeylistenerToWindow(window);
-
 			}
 
 			private void addKeylistenerToWindow(IWorkbenchWindow window) {
-				IWorkbenchPage activePage = window.getActivePage();
-				final IEditorPart iep = activePage.getActiveEditor();
-				if (!(iep instanceof ITextEditor)) return;
-				ITextEditor editor = (ITextEditor)iep;
-				((StyledText)editor.getAdapter(org.eclipse.swt.widgets.Control.class)).addKeyListener(new KeyListener() {
-
-					@Override
-					public void keyReleased(KeyEvent e) {
-						System.out.println("key release ");
-
-						IWorkbench wb = PlatformUI.getWorkbench();
-						IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
-						IWorkbenchPage page = win.getActivePage();
-
-						IEditorPart part = page.getActiveEditor();
-						if (!(part instanceof AbstractTextEditor))
-							return;
-						ITextEditor editor = (ITextEditor)part;
-						
-						// get cursor location
-						IDocumentProvider provider = editor.getDocumentProvider();
-						IDocument document = provider.getDocument(part.getEditorInput());
-						ITextSelection textSelection = (ITextSelection) part.getSite().getSelectionProvider().getSelection();
-						int start = textSelection.getStartLine();
-						int end = textSelection.getEndLine();
-						int offset = textSelection.getOffset();
-						try {
-							int lineNumber = document.getLineOfOffset(offset);
-						} catch (BadLocationException e2) {
-							// TODO Auto-generated catch block
-							e2.printStackTrace();
-						}
-						// end of get cursor location
-						
-						
-						System.out.println("Start "+start+", end "+end+", offset "+offset);
-//						IDocumentProvider dp = editor.getDocumentProvider();
-//						IDocument doc = dp.getDocument(editor.getEditorInput());
-//						String text = doc.get() + "testtesttest";
-//						doc.set(text);
-						
-						try {
-							document.replace(offset, 0, "testtesttest\n");
-						} catch (BadLocationException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-						
-						// doc.set(text) sets the cursor in the start of the file, so set the cursor in the same location it was in
-						part.getSite().getSelectionProvider().setSelection(textSelection);
+				if(keylistener == null) {
+					keylistener = getKeylistener();
+					StyledText styledText = getStyledText(window);
+					if(styledText != null) {
+						styledText.addKeyListener(keylistener);
 					}
-
-					@Override
-					public void keyPressed(KeyEvent e) {
-						System.out.println("key pressed ");
-					}
-				});
+				}
 			}
 
+			private StyledText getStyledText(IWorkbenchWindow window) {
+				IWorkbenchPage activePage = window.getActivePage();
+				final IEditorPart iep = activePage.getActiveEditor();
+				if (!(iep instanceof ITextEditor)) return null;
+				ITextEditor editor = (ITextEditor)iep;
+				StyledText styledText = (StyledText)editor.getAdapter(org.eclipse.swt.widgets.Control.class);
+				return styledText;
+			}
+		};
+	}
+	
+	public KeyListener getKeylistener() {
+		return new KeyListener() {
+	
+			@Override
+			public void keyReleased(KeyEvent e) {
+				System.out.println("key release ");
+	
+				IWorkbench wb = PlatformUI.getWorkbench();
+				IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
+				IWorkbenchPage page = win.getActivePage();
+	
+				IEditorPart part = page.getActiveEditor();
+				if (!(part instanceof AbstractTextEditor))
+					return;
+				ITextEditor editor = (ITextEditor)part;
+				
+				// get cursor location
+				IDocumentProvider provider = editor.getDocumentProvider();
+				IDocument document = provider.getDocument(part.getEditorInput());
+				ITextSelection textSelection = (ITextSelection) part.getSite().getSelectionProvider().getSelection();
+				int start = textSelection.getStartLine();
+				int end = textSelection.getEndLine();
+				int offset = textSelection.getOffset();
+				try {
+					int lineNumber = document.getLineOfOffset(offset);
+				} catch (BadLocationException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+				// end of get cursor location
+				
+				
+				System.out.println("Start "+start+", end "+end+", offset "+offset);
+	//			IDocumentProvider dp = editor.getDocumentProvider();
+	//			IDocument doc = dp.getDocument(editor.getEditorInput());
+	//			String text = doc.get() + "testtesttest";
+	//			doc.set(text);
+				
+				try {
+					document.replace(offset, 0, " testtesttest\n");
+				} catch (BadLocationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				// doc.set(text) sets the cursor in the start of the file, so set the cursor in the same location it was in
+				part.getSite().getSelectionProvider().setSelection(textSelection);
+			}
+	
+			@Override
+			public void keyPressed(KeyEvent e) {
+				System.out.println("key pressed ");
+			}
 		};
 	}
 
